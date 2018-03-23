@@ -1,8 +1,12 @@
 import React from 'react';
+import Nav from './nav';
 
 const App = () => (
   <div>
-    <h2 id="heading">Hello ReactJS </h2>
+    <Nav />
+    <h2 id="heading" className="display-1">
+      AGL
+    </h2>
     <header />
   </div>
 );
