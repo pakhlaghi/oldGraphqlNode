@@ -1,13 +1,11 @@
 import React from 'react';
 import Nav from './nav';
+import Header from './header';
 
 const App = () => (
   <div>
     <Nav />
-    <h2 id="heading" className="display-1">
-      AGL
-    </h2>
-    <header />
+    <Header />
   </div>
 );
 

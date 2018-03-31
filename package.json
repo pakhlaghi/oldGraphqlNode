@@ -5,9 +5,11 @@
     "main": "index.js",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-        "dev": "webpack-dev-server --config webpack/webpack.dev.config.js",
+        "dev": "webpack-dev-server --open --config webpack/webpack.dev.js",
+        "build": "webpack --config webpack/webpack.prod.js  --progress --colors",
         "lint": "esw webpack.config.* src tools --color",
-        "lint:watch": "npm run lint -- --watch"
+        "lint:watch": "npm run lint -- --watch",
+        "start": "npm run dev"
     },
     "author": "Peyman Akhlaghi",
     "license": "ISC",
@@ -29,6 +31,7 @@
         "babel-preset-react": "^6.24.1",
         "babel-preset-stage-0": "^6.24.1",
         "babel-register": "^6.26.0",
+        "clean-webpack-plugin": "^0.1.19",
         "css-loader": "^0.28.11",
         "eslint": "^4.9.0",
         "eslint-config-airbnb": "^16.1.0",
@@ -46,18 +49,14 @@
         "prop-types": "^15.6.1",
         "sass-loader": "^6.0.7",
         "style-loader": "^0.20.3",
+        "uglifyjs-webpack-plugin": "^1.2.4",
         "webpack": "^4.1.1",
         "webpack-cli": "^2.0.12",
-        "webpack-dev-server": "^3.1.1"
+        "webpack-dev-server": "^3.1.1",
+        "webpack-merge": "^4.1.2"
     },
     "babel": {
-        "presets": [
-            "es2015",
-            "react",
-            "stage-0"
-        ],
-        "plugins": [
-            "transform-object-rest-spread"
-        ]
+        "presets": ["es2015", "react", "stage-0"],
+        "plugins": ["transform-object-rest-spread"]
     }
 }

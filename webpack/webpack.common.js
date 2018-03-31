@@ -1,13 +1,13 @@
-const webpack = require('webpack');
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const CleanWebpackPlugin = require('clean-webpack-plugin');
 
 module.exports = {
   entry: [path.join(__dirname, '../src/index.js')],
   output: {
-    path: path.join(`${__dirname}../dist`),
-    filename: 'bundle.js',
+    path: path.join(__dirname, '../dist'),
+    filename: '[name].bundle.js',
   },
   module: {
     rules: [
@@ -26,17 +26,13 @@ module.exports = {
     ],
   },
   plugins: [
+    new CleanWebpackPlugin(['dist'], { root: path.resolve(__dirname, '..') }),
     new HtmlWebpackPlugin({
       hash: true,
-      template: path.join(__dirname, '../src/index.html'),
-      path: path.join(__dirname, '../dist/'),
+      template: path.join(__dirname, '../src/index.html'), // template to add script and css tag
+      path: path.join(__dirname, '../dist/'), // add scripts and css into this folder
       filename: 'index.html',
     }),
     new ExtractTextPlugin('style.css'),
   ],
-  devServer: {
-    contentBase: path.join(__dirname, '../src'),
-    port: 9000,
-    historyApiFallback: true,
-  },
 };
