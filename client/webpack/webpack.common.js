@@ -6,7 +6,7 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 module.exports = {
   entry: [path.join(__dirname, '../src/index.js')],
   output: {
-    path: path.join(__dirname, '../dist'),
+    path: path.join(__dirname, '../../public'),
     filename: '[name].bundle.js',
   },
   module: {
@@ -26,11 +26,11 @@ module.exports = {
     ],
   },
   plugins: [
-    new CleanWebpackPlugin(['dist'], { root: path.resolve(__dirname, '..') }),
+    new CleanWebpackPlugin(['public'], { root: path.resolve(__dirname, '../..') }),
     new HtmlWebpackPlugin({
       hash: true,
       template: path.join(__dirname, '../src/index.html'), // template to add script and css tag
-      path: path.join(__dirname, '../dist/'), // add scripts and css into this folder
+      path: path.join(__dirname, '../../public/'), // add scripts and css into this folder
       filename: 'index.html',
     }),
     new ExtractTextPlugin('style.css'),
