@@ -1,8 +1,4 @@
 @import "~bootstrap/scss/bootstrap";
-.navbar {
-    background: #f97300;
-}
-
 .nav-link,
 .navbar-brand {
     color: #f4f4f4;
@@ -38,8 +34,9 @@
 /*header style*/
 
 .header {
-    //background-image: url("../images/headerback.jpg");
+    background-image: url("/assets/images/header.jpg");
     background-attachment: fixed;
     background-size: cover;
     background-position: center;
+    height: 500px;
 }

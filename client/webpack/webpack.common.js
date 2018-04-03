@@ -2,6 +2,7 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
   entry: [path.join(__dirname, '../src/index.js')],
@@ -27,6 +28,7 @@ module.exports = {
   },
   plugins: [
     new CleanWebpackPlugin(['server/public'], { root: path.resolve(__dirname, '../..') }),
+    new CopyWebpackPlugin([{ from: 'src/assets/images', to: 'assets/images' }]), // compy assets to build folder
     new HtmlWebpackPlugin({
       hash: true,
       template: path.join(__dirname, '../src/index.html'), // template to add script and css tag
