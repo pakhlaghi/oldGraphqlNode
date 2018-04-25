@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 const Nav = ({ navData }) => {
   const { brand, menu } = navData;
@@ -31,7 +32,7 @@ const Nav = ({ navData }) => {
       <div className="collapse navbar-collapse " id="navbarSupportedContent">
         <ul className="navbar-nav mr-4">
           {menu.map(item => (
-            <li className="nav-item">
+            <li key={item.id} className="nav-item">
               <a className="nav-link" href={`/${item.link}`}>
                 {item.text}
               </a>
@@ -41,6 +42,22 @@ const Nav = ({ navData }) => {
       </div>
     </nav>
   );
+};
+
+Nav.propTypes = {
+  navData: PropTypes.shape({
+    brand: PropTypes.shape({
+      text: PropTypes.string,
+      imgUrl: PropTypes.string,
+    }),
+    menu: PropTypes.arrayOf(PropTypes.shape({
+      id: PropTypes.number,
+      text: PropTypes.string,
+      link: PropTypes.string,
+      pId: PropTypes.number,
+      order: PropTypes.number,
+    })),
+  }).isRequired,
 };
 
 export default Nav;
