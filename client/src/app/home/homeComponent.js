@@ -4,10 +4,11 @@ import PropTypes from 'prop-types';
 import Nav from '../shared/nav';
 import Header from '../shared/header';
 
-const HomeComponent = ({ navData }) => (
+const HomeComponent = ({ navData, fetchNavJson }) => (
   <div>
     <Nav navData={navData} />
     <Header />
+    <button onClick={() => fetchNavJson()}>Get Nav</button>
   </div>
 );
 
@@ -16,6 +17,7 @@ HomeComponent.propTypes = {
     brand: PropTypes.object,
     menu: PropTypes.array,
   }).isRequired,
+  fetchNavJson: PropTypes.func.isRequired,
 };
 
 export default HomeComponent;

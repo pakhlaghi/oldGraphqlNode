@@ -1,64 +1,32 @@
 import types from './types';
 
 const INITIAL_STATE = {
+  showSpinner: false,
   navData: {
-    brand: {
-      text: 'Code Core',
-      imgUrl: 'https://getbootstrap.com/assets/brand/bootstrap-solid.svg',
-    },
-    menu: [
-      {
-        id: 1,
-        text: 'Home',
-        link: '#',
-        pId: 0,
-        order: 1,
-      },
-      {
-        id: 2,
-        text: 'About',
-        link: 'About',
-        pId: 0,
-        order: 2,
-      },
-      {
-        id: 3,
-        text: 'Portfolio',
-        link: 'Portfolio',
-        pId: 0,
-        order: 3,
-      },
-      {
-        id: 4,
-        text: 'Team',
-        link: 'Team',
-        pId: 0,
-        order: 4,
-      },
-      {
-        id: 5,
-        text: 'Contact',
-        link: 'Contact',
-        pId: 0,
-        order: 5,
-      },
-    ],
+    brand: {},
+    menu: [],
   },
 };
 
 const appReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
-    case types.INCREMENT_COUNT: {
+    case types.REQUEST_NAV_JSON: {
       return {
         ...state,
-        count: state.count + action.value,
+        showSpinner: true,
+        navData: {
+          brand: {},
+          menu: [],
+        },
       };
     }
 
-    case types.DECREMENT_COUNT: {
+    case types.RECEIVE_NAV_JSON: {
+      const { navData } = action;
       return {
         ...state,
-        count: state.count - action.value,
+        navData,
+        showSpinner: false,
       };
     }
 
