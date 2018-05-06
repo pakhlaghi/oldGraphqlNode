@@ -5,7 +5,6 @@ const fs = require('fs');
 const graphqlHTTP = require('express-graphql');
 const { makeExecutableSchema } = require('graphql-tools');
 
-const { Client } = require('pg');
 const mysql = require('mysql')
 
 // graphql
