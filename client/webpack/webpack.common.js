@@ -10,7 +10,6 @@ module.exports = {
     path: path.join(__dirname, "../../server/public"),
     filename: "[name].bundle.js"
   },
-  resolve: { extensions: ['.js', '.jsx'] },
   module: {
     rules: [
       {
