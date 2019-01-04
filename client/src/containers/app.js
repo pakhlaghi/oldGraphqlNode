@@ -2,12 +2,14 @@ import React from "react";
 import { connect } from "react-redux";
 import Loadable from "react-loadable";
 // components
-import Layout from "../features/layout/layout";
+import Layout from "../features/layout";
 import Loading from "../features/loading";
 import HomeContainer from "./homeContainer";
 // route
 import { withRouter } from "react-router-dom";
 import CCRoutes from "../utility/ccRoutes";
+// redux
+import { toggleDrawer, getContentAsync } from "../redux/app/layout/action";
 
 // lazy loading Dashboard component
 const lazyDashboardContainer = Loadable({
@@ -21,7 +23,10 @@ const lazyLoginContainer = Loadable({
   loading: Loading
 });
 
-function App({ loginSt, pathname }) {
+function App(props) {
+  // props
+  const { layoutSt, loginSt, pathname, onToggleDrawer } = props;
+
   const isAuthenticated = !!loginSt.token;
 
   // routes array to create router
@@ -31,19 +36,21 @@ function App({ loginSt, pathname }) {
       exact: true,
       component: HomeContainer,
       extra: {
-        isFullHeader: true
+        showHeader: false,
+        showFooter: false
       }
     },
     {
-      path: "/home",
+      path: "/page/:contentId",
       exact: true,
       component: HomeContainer,
       extra: {
-        isFullHeader: true
+        showHeader: false,
+        showFooter: false
       }
     },
     {
-      path: "/Login",
+      path: "/login",
       exact: true,
       component: lazyLoginContainer
     },
@@ -63,7 +70,11 @@ function App({ loginSt, pathname }) {
   ];
 
   return (
-    <Layout pathname={pathname}>
+    <Layout
+      pathname={pathname}
+      layoutSt={layoutSt}
+      onToggleDrawer={onToggleDrawer}
+    >
       <CCRoutes routes={routes} />
     </Layout>
   );
@@ -73,8 +84,24 @@ function App({ loginSt, pathname }) {
 const mapStateToProps = (state, props) => {
   return {
     loginSt: state.login,
+    layoutSt: state.app.layout,
     pathname: props.location.pathname
   };
 };
 
-export default withRouter(connect(mapStateToProps)(App));
+// redux map actions
+const mapDispatchToProps = dispatch => {
+  // onInit: load data onInit
+  dispatch(getContentAsync());
+
+  return {
+    onToggleDrawer: status => dispatch(toggleDrawer(status))
+  };
+};
+
+export default withRouter(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(App)
+);

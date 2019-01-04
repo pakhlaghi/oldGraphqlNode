@@ -1,20 +1,30 @@
 import React from "react";
-import Home from "../features/home/home";
-import { changeTitleAsync, getUsers } from "../redux/home/action";
+import Home from "../features/home";
 
+// redux
 import { connect } from "react-redux";
+import { toggleDrawer } from "../redux/app/layout/action";
+import { getContentBodyAsync } from "../redux/home/action";
 
-const mapStateToProps = (state, props) => {
+const mapStateToProps = state => {
   return {
-    home: state.home,
-    match: props.match // match is react-route property
+    homeSt: state.home,
+    layoutSt: state.app.layout
   };
 };
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch, props) => {
+  // init with empty id
+  dispatch(
+    getContentBodyAsync(
+      props.match.params && props.match.params.contentId
+        ? props.match.params.contentId
+        : ""
+    )
+  );
+
   return {
-    onAddAsync: title => dispatch(changeTitleAsync(title)),
-    onGetUsersAsync: () => dispatch(getUsers())
+    onToggleDrawer: status => dispatch(toggleDrawer(status))
   };
 };
 
