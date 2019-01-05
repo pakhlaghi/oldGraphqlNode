@@ -67,6 +67,5 @@
     "plugins": [
       "transform-object-rest-spread"
     ]
-  },
-  "proxy": "http://localhost:9000"
+  }
 }
