@@ -1,6 +1,6 @@
 import React from "react";
 import classNames from "classnames";
-import styles from "./dashboard.style";
+import styles from "./dashboardSnackbar.style";
 import { withStyles } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Drawer from "@material-ui/core/Drawer";
@@ -14,16 +14,63 @@ import Badge from "@material-ui/core/Badge";
 import MenuIcon from "@material-ui/icons/Menu";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import NotificationsIcon from "@material-ui/icons/Notifications";
+import { withSnackbar } from "notistack";
+import ListItems from "./listItems";
+import MainModule from "./modules/mainModule";
 
-const Dashboard = props => {
+import Loadable from "react-loadable";
+// components
+import Loading from "./../../features/loading";
+
+const DashboardSnackbar = props => {
   const {
     dashboardSt,
     classes,
     onCloseDrawer,
     onOpenDrawer,
-    onGetItemsAsync,
-    loginSt
+    enqueueSnackbar,
+    match
   } = props;
+
+  // lazy loading Dashboard component
+  const lazyItemsModule = Loadable({
+    loader: () => import("./modules/itemsModule"),
+    loading: Loading
+  });
+
+  // lazy loading Dashboard component
+  const lazyPagesModule = Loadable({
+    loader: () => import("./modules/pagesModule"),
+    loading: Loading
+  });
+
+  // lazy loading Dashboard component
+  const lazyMediaModule = Loadable({
+    loader: () => import("./modules/mediaModule"),
+    loading: Loading
+  });
+
+  // lazy loading Dashboard component
+  const lazySettingModule = Loadable({
+    loader: () => import("./modules/settingModule"),
+    loading: Loading
+  });
+
+  const componentMap = {
+    main: MainModule,
+    items: lazyItemsModule,
+    pages: lazyPagesModule,
+    media: lazyMediaModule,
+    setting: lazySettingModule
+  };
+
+  const showSnackbar = variant => {
+    enqueueSnackbar("I love snacks." + variant, { variant });
+  };
+
+  const handleBellClick = () => {
+    showSnackbar("warning");
+  };
 
   return (
     <div className={classes.root}>
@@ -59,7 +106,7 @@ const Dashboard = props => {
           >
             Dashboard
           </Typography>
-          <IconButton color="inherit">
+          <IconButton color="inherit" onClick={handleBellClick}>
             <Badge badgeContent={4} color="secondary">
               <NotificationsIcon />
             </Badge>
@@ -82,25 +129,17 @@ const Dashboard = props => {
           </IconButton>
         </div>
         <Divider />
-        <List />
-        <Divider />
-        <List />
+        <ListItems />
       </Drawer>
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
-        <Typography variant="h4" gutterBottom component="h2">
-          Orders
-        </Typography>
-        <Typography component="div" className={classes.chartContainer}>
-          SimpleLineChart
-        </Typography>
-        <Typography variant="h4" gutterBottom component="h2">
-          Products
-        </Typography>
-        <div className={classes.tableContainer}>SimpleTable</div>
+
+        {componentMap[match.params.module]
+          ? React.createElement(componentMap[match.params.module])
+          : null}
       </main>
     </div>
   );
 };
 
-export default withStyles(styles)(Dashboard);
+export default withStyles(styles)(withSnackbar(DashboardSnackbar));
