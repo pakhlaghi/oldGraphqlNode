@@ -33,14 +33,20 @@ const DashboardSnackbar = props => {
   } = props;
 
   // lazy loading Dashboard component
-  const lazyItemsModule = Loadable({
-    loader: () => import("./modules/itemsModule"),
+  const lazyMenuModule = Loadable({
+    loader: () => import("./modules/menuModule"),
     loading: Loading
   });
 
   // lazy loading Dashboard component
-  const lazyPagesModule = Loadable({
-    loader: () => import("./modules/pagesModule"),
+  const lazyNewPageModule = Loadable({
+    loader: () => import("./modules/newPageModule"),
+    loading: Loading
+  });
+
+   // lazy loading Dashboard component
+   const lazyMyPagesModule = Loadable({
+    loader: () => import("./modules/myPagesModule"),
     loading: Loading
   });
 
@@ -58,8 +64,9 @@ const DashboardSnackbar = props => {
 
   const componentMap = {
     main: MainModule,
-    items: lazyItemsModule,
-    pages: lazyPagesModule,
+    menu: lazyMenuModule,
+    newPage: lazyNewPageModule,
+    myPages: lazyMyPagesModule,
     media: lazyMediaModule,
     setting: lazySettingModule
   };
