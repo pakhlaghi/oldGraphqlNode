@@ -37,36 +37,33 @@ const styles = theme => ({
     "&::before": {
       content: `''`,
       display: "block",
-      height: "calc(100% - 45px)",
-      position: "absolute",
-      top: "45px",
-      left: "0",
-      width: "100%",
-      zIndex: "1000"
-    }
-  },
-  selected: {
-    "&::before": {
-      content: `''`,
-      backgroundColor: blueGrey[900],
-      background: "url(./assets/images/check_box.svg)",
-      backgroundRepeat: "no-repeat",
-      backgroundPosition: "center",
-      backgroundSize: "10%",
-      opacity: "0.4",
-      display: "block",
       height: "100%",
       position: "absolute",
+      top: "0",
       left: "0",
       width: "100%",
-      zIndex: "1000"
+      zIndex: "100"
     }
   },
-  inCheckbox: {
-    position: "relative",
-    zIndex: "2000",
-    top: "55px",
-    left: "5px"
+  leftDialogAction: {
+    position: "absolute",
+    left: "25px"
+  },
+  badge: {
+    top: -2,
+    right: 0,
+    // The border color match the background color.
+    border: `2px solid ${
+      theme.palette.type === "light"
+        ? theme.palette.grey[200]
+        : theme.palette.grey[900]
+    }`
+  },
+  marginBottom: {
+    marginBottom: "20px"
+  },
+  topZIndex: {
+    zIndex: "3000"
   }
 });
 

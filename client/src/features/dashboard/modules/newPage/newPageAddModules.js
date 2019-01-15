@@ -8,6 +8,7 @@ import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
+import Badge from "@material-ui/core/Badge";
 
 // content modules
 import CCenterTitleText from "./../../../contentModules/cCenterTitleText";
@@ -16,10 +17,28 @@ import CImageTile from "./../../../contentModules/cImageTile";
 import CIconTitleText from "./../../../contentModules/CIconTitleText";
 import CHeader from "./../../../contentModules/header/cHeader";
 import CFooter from "./../../../contentModules/cFooter";
-import { Checkbox } from "@material-ui/core";
+import {
+  Grid,
+  List,
+  ListItem,
+  ListItemText,
+  ListItemIcon
+} from "@material-ui/core";
+
+//Utility
+import CCMaterialIcon from "./../../../../utility/ccMaterialIcon";
 
 const NewPageAddModules = props => {
-  const { classes, isAddModulesOpen, toggleAddModulesModal, modules } = props;
+  const {
+    classes,
+    isAddModulesOpen,
+    selectedCount,
+    toggleAddModulesModal,
+    saveAddModulesModal,
+    addModuleFromList,
+    modulesToAdd,
+    defaultModules
+  } = props;
 
   const componentMap = {
     CCenterTitleText: CCenterTitleText,
@@ -36,11 +55,11 @@ const NewPageAddModules = props => {
   };
 
   const handleAddModulesModalAdd = () => {
-    toggleAddModulesModal(false);
+    saveAddModulesModal(false);
   };
 
-  const handleVisibleClick = (index, status) => {
-    console.log("dfd");
+  const handleAddModuleFromListClick = moduleId => () => {
+    addModuleFromList(moduleId);
   };
 
   return (
@@ -56,33 +75,57 @@ const NewPageAddModules = props => {
       <DialogTitle id="alert-dialog-title">{"Add Modules"}</DialogTitle>
 
       <DialogContent>
-        {modules.map((module, index) => (
-          <div key={index} className={classes.moduleContainer}>
-            <div className={classes.inCheckbox}>
-              <Checkbox />
-            </div>
-            <Button className={`${classes.selected} ${classes.fullWidth}`}>
-              <Paper
-                className={`${classes.fullWidth} ${classes.module} ${
-                  module.visible ? "" : classes.invisible
-                }`}
-              >
-                {React.createElement(componentMap[module.type], {
-                  contentData: module.contents
-                })}
-              </Paper>
-            </Button>
-          </div>
-        ))}
+        <Grid container>
+          <Grid item sm="2" className={classes.topZIndex}>
+            <List component="nav">
+              {defaultModules.map(module => (
+                <React.Fragment key={module.id}>
+                  <ListItem
+                    button
+                    onClick={handleAddModuleFromListClick(module.id)}
+                  >
+                    <ListItemIcon>
+                      <CCMaterialIcon icon={module.icon} />
+                    </ListItemIcon>
+                    <ListItemText primary={module.name} />
+                  </ListItem>
+                </React.Fragment>
+              ))}
+            </List>
+          </Grid>
+          <Grid item sm="10">
+            {modulesToAdd &&
+              modulesToAdd.map(module => (
+                <div key={module.id}>
+                  <Paper
+                    className={`${classes.marginBottom} ${classes.fullWidth} ${
+                      classes.module
+                    } ${classes.overlayer}`}
+                  >
+                    {React.createElement(componentMap[module.type], {
+                      contentData: module.contents
+                    })}
+                  </Paper>
+                </div>
+              ))}
+          </Grid>
+        </Grid>
       </DialogContent>
 
-      <DialogActions>
+      <DialogActions className={classes.topZIndex}>
         <Button onClick={handleAddModulesModalCancel} color="primary">
           Cancel
         </Button>
-        <Button onClick={handleAddModulesModalAdd} color="primary" autoFocus>
-          Add
-        </Button>
+        <Badge
+          color="primary"
+          badgeContent={selectedCount}
+          classes={{ badge: classes.badge }}
+          invisible={!selectedCount}
+        >
+          <Button onClick={handleAddModulesModalAdd} color="primary" autoFocus>
+            Add
+          </Button>
+        </Badge>
       </DialogActions>
     </Dialog>
   );
