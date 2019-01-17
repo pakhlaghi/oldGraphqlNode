@@ -449,19 +449,9 @@ let schema = buildSchema(`
     headerContent: tHeader,
     footerContent: tFooter
   },
-  type tDrawerItem {
-    text: String,
-    action: String,
-    icon: String,
-    children: []
-  },
-  type tDashboardContent {
-    drawerItems: [tDrawerItem]
-  },
   type Query {
     items: [tItem]!,
     content: tContent,
-    dashboardContent: tDashboardContent,
     contentById(id: String): String
   },
   type Mutation {
