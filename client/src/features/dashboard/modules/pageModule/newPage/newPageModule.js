@@ -16,7 +16,7 @@ import { Button } from "@material-ui/core";
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import VisibilityOffIcon from "@material-ui/icons/VisibilityOff";
 import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
-import SettingsIcon from "@material-ui/icons/Settings";
+import EditIcon from "@material-ui/icons/Edit";
 import LibraryAddIcon from "@material-ui/icons/LibraryAdd";
 import ControlCameraIcon from "@material-ui/icons/ControlCamera";
 import AddBoxIcon from "@material-ui/icons/AddBox";
@@ -67,9 +67,13 @@ const NewPageModule = props => {
     newPageHandler.moveToTrash(moduleId);
   };
 
-  const handleSettingClick = moduleId => {
+  const handleEditClick = moduleId => _ => {
     console.log("Setting");
-    newPageHandler.moduleSetting(moduleId);
+    newPageHandler.editModule(moduleId);
+  };
+
+  const handleMoveClick = moduleId => _ => {
+    newPageHandler.moveModule(moduleId);
   };
 
   return (
@@ -94,11 +98,9 @@ const NewPageModule = props => {
               handle=".handle"
             >
               <div className={classes.moduleContainer}>
-                <span className="handle">
-                  <IconButton>
-                    <ControlCameraIcon />
-                  </IconButton>
-                </span>
+                <IconButton onClick={handleMoveClick(module.id)}>
+                  <ControlCameraIcon />
+                </IconButton>
                 <IconButton onClick={handleAddBottomClick(module.id)}>
                   <LibraryAddIcon />
                 </IconButton>
@@ -118,11 +120,11 @@ const NewPageModule = props => {
                 <IconButton onClick={handleTrashClick(module.id)}>
                   <DeleteForeverIcon />
                 </IconButton>
-                <IconButton onClick={handleSettingClick}>
-                  <SettingsIcon />
+                <IconButton onClick={handleEditClick}>
+                  <EditIcon />
                 </IconButton>
                 <Paper
-                  className={`${classes.module} ${
+                  className={`${classes.module} ${classes.overlayer} ${
                     module.visible ? "" : classes.invisible
                   }`}
                 >
@@ -163,6 +165,7 @@ const NewPageModule = props => {
         toggleAddModulesModal={newPageHandler.toggleAddModulesModal}
         defaultModules={newPageSt.defaultModules}
         modulesToAdd={newPageSt.modulesToAdd}
+        removeModule={newPageHandler.removeModule}
         saveAddModulesModal={newPageHandler.saveAddModulesModal}
         selectedCount={newPageSt.selectedCount}
         addModuleFromList={newPageHandler.addModuleFromList}

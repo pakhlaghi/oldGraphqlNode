@@ -8,7 +8,10 @@ import {
   TOGGLE_ADD_MODULES_MODAL,
   SAVE_ADD_MODULES_MODAL,
   ADD_MODULE_FROM_LIST,
-  GET_DEFAULT_MODULES_SUCCESS
+  GET_DEFAULT_MODULES_SUCCESS,
+  REMOVE_MODULE,
+  MOVE_MODULE,
+  EDIT_MODULE
 } from "./types";
 
 export default (
@@ -49,6 +52,12 @@ export default (
       return addModuleFromList(state, action);
     case GET_DEFAULT_MODULES_SUCCESS:
       return getDefaultModulesSuccess(state, action);
+    case REMOVE_MODULE:
+      return removeModule(state, action);
+    case MOVE_MODULE:
+      return moveModule(state, action);
+    case EDIT_MODULE:
+      return editModule(state, action);
   }
   return state;
 };
@@ -140,13 +149,38 @@ export const addModuleFromList = (state, action) => {
   const selectedModule = state.defaultModules.filter(
     module => module.id == action.payload.moduleId
   );
+
+  const maxId =
+    state.modulesToAdd.length !== 0
+      ? state.modulesToAdd.map(el => el.id).reduce(maxCallback, 0)
+      : 0;
+  const cloneModule = { ...selectedModule[0] };
+  cloneModule.id = maxId + 1;
+
   // push cloned obj {...
-  state.modulesToAdd.push({ ...selectedModule[0] });
+  state.modulesToAdd.push(cloneModule);
   return { ...state, selectedCount: state.selectedCount + 1 };
 };
 
 export const getDefaultModulesSuccess = (state, action) => {
   return { ...state, defaultModules: action.payload.data };
+};
+
+export const removeModule = (state, action) => {
+  state.modulesToAdd = state.modulesToAdd.filter(
+    module => module.id !== action.payload.moduleId
+  );
+  return { ...state, selectedCount: state.selectedCount - 1 };
+};
+
+export const moveModule = (state, action) => {
+  console.log(action.payload.moduleId);
+  return { ...state };
+};
+
+export const editModule = (state, action) => {
+  console.log(action.payload.moduleId);
+  return { ...state };
 };
 
 // ------------------------------------------------------------------------------

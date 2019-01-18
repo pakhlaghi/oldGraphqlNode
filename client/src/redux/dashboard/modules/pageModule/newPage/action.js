@@ -8,7 +8,10 @@ import {
   TOGGLE_ADD_MODULES_MODAL,
   SAVE_ADD_MODULES_MODAL,
   ADD_MODULE_FROM_LIST,
-  GET_DEFAULT_MODULES_SUCCESS
+  GET_DEFAULT_MODULES_SUCCESS,
+  REMOVE_MODULE,
+  EDIT_MODULE,
+  MOVE_MODULE
 } from "./types";
 import { dataService } from "../../../../../service/dataService";
 
@@ -48,9 +51,12 @@ export const moveToTrash = moduleId => ({
   }
 });
 
-export const moduleSetting = () => {
-  console.log("Setting");
-};
+export const editModule = moduleId => ({
+  type: EDIT_MODULE,
+  payload: {
+    moduleId
+  }
+});
 
 export const toggleCancelModal = (status, history) => ({
   type: TOGGLE_CANCEL_MODAL,
@@ -78,6 +84,20 @@ export const getDefaultModulesSuccess = data => ({
   type: GET_DEFAULT_MODULES_SUCCESS,
   payload: {
     data
+  }
+});
+
+export const removeModule = moduleId => ({
+  type: REMOVE_MODULE,
+  payload: {
+    moduleId
+  }
+});
+
+export const moveModule = moduleId => ({
+  type: MOVE_MODULE,
+  payload: {
+    moduleId
   }
 });
 
