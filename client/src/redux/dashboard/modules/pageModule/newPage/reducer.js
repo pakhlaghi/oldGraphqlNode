@@ -12,12 +12,15 @@ import {
   REMOVE_MODULE,
   MOVE_MODULE,
   MOVE_TO_MODULE,
-  EDIT_MODULE
+  EDIT_MODULE,
+  CANCEL_EDITING,
+  APPLY_CHANGES
 } from "./types";
 
 export default (
   state = {
     showSpinner: false,
+    editModuleId: null,
     isAnyModuleMoving: false,
     page: {
       title: "New Page",
@@ -62,6 +65,10 @@ export default (
       return moveToModule(state, action);
     case EDIT_MODULE:
       return editModule(state, action);
+    case CANCEL_EDITING:
+      return cancelEditing(state, action);
+    case APPLY_CHANGES:
+      return applyChanges(state, action);
   }
   return state;
 };
@@ -142,6 +149,10 @@ const saveAddModulesModal = (state, action) => {
 
   state.modulesToAdd = [];
 
+  action.payload.enqueueSnackbar(state.selectedCount + " module/s added", {
+    variant: "success"
+  });
+
   return {
     ...state,
     isAddModulesOpen: false,
@@ -216,12 +227,46 @@ export const moveToModule = (state, action) => {
 
   arrayMove(state.page.modules, fromIndex, toIndex);
 
+  action.payload.enqueueSnackbar("Module Moved Successfuly", {
+    variant: "success"
+  });
   return { ...state, isAnyModuleMoving: false };
 };
 
 export const editModule = (state, action) => {
-  console.log(action.payload.moduleId);
-  return { ...state };
+  state.page.modules = state.page.modules.map(module => {
+    if (module.id == action.payload.moduleId) {
+      module.contents.isEditing = true;
+    }
+    return module;
+  });
+
+  return { ...state, editModuleId: action.payload.moduleId };
+};
+
+export const cancelEditing = (state, action) => {
+  state.page.modules = state.page.modules.map(module => {
+    module.contents.isEditing = false;
+    return module;
+  });
+
+  return { ...state, editModuleId: null };
+};
+
+export const applyChanges = (state, action) => {
+  state.page.modules = state.page.modules.map(module => {
+    if (module.id == state.editModuleId) {
+      module = mapInputToState(
+        action.payload.moduleType,
+        module,
+        action.payload.inputs
+      );
+    }
+    module.contents.isEditing = false;
+    return module;
+  });
+
+  return { ...state, editModuleId: null };
 };
 
 // ------------------------------------------------------------------------------
@@ -241,15 +286,43 @@ const getModuleIndexFromId = (modules, id) => {
   return addIntoIndex;
 };
 
-const arrayMove = (array, from, to) => {
-  if (to === from) return array;
+const arrayMove = (arr, from, to) => {
+  arr.splice(to, 0, arr.splice(from, 1)[0]);
+};
 
-  var target = array[from];
-  var increment = to < from ? -1 : 1;
-
-  for (var k = from; k != to; k += increment) {
-    array[k] = array[k + increment];
+const mapInputToState = (moduleType, module, inputs) => {
+  switch (moduleType) {
+    case "cTitleText":
+      return mapInputsTitleText(module, inputs);
+    default:
+      return;
   }
-  array[to] = target;
-  return array;
+};
+
+const mapInputsTitleText = (module, inputs) => {
+  module.contents.color = inputs.containerColor;
+  module.contents.background = inputs.containerBackground;
+
+  module.contents.title.text = inputs.titleText;
+  module.contents.title.color = inputs.titleColor;
+  module.contents.title.isVisible = inputs.titleSwitch;
+
+  module.contents.subTitle.text = inputs.subTitleText;
+  module.contents.subTitle.color = inputs.subTitleColor;
+  module.contents.subTitle.isVisible = inputs.subTitleSwitch;
+
+  module.contents.line.width = inputs.lineWidth;
+  module.contents.line.color = inputs.lineColor;
+  module.contents.line.isVisible = inputs.lineSwitch;
+
+  module.contents.body.text = inputs.bodyText;
+  module.contents.body.color = inputs.bodyColor;
+  module.contents.body.isVisible = inputs.bodySwitch;
+
+  module.contents.readMore.text = inputs.readMoreText;
+  module.contents.readMore.url = inputs.readMoreUrl;
+  module.contents.readMore.color = inputs.readMoreColor;
+  module.contents.readMore.isVisible = inputs.readMoreSwitch;
+
+  return module;
 };

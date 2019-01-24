@@ -24,7 +24,7 @@ import ArrowDownwardIcon from "@material-ui/icons/ArrowDownward";
 import ArrowUpwardIcon from "@material-ui/icons/ArrowUpward";
 
 // content modules
-import CCenterTitleText from "./../../../../contentModules/cCenterTitleText";
+import CTitleText from "../../../../contentModules/cTitleText";
 import CImageText from "./../../../../contentModules/cImageText";
 import CImageTile from "./../../../../contentModules/cImageTile";
 import CIconTitleText from "./../../../../contentModules/CIconTitleText";
@@ -41,7 +41,7 @@ const NewPageModule = props => {
   } = props;
 
   const componentMap = {
-    CCenterTitleText: CCenterTitleText,
+    CTitleText: CTitleText,
     CImageText: CImageText,
     CImageTile: CImageTile,
     CIconTitleText: CIconTitleText,
@@ -50,27 +50,22 @@ const NewPageModule = props => {
   };
 
   const handleAddTopClick = moduleId => _ => {
-    console.log("add top");
     newPageHandler.openAddModuleModalAsync(moduleId, "top");
   };
 
   const handleAddBottomClick = moduleId => _ => {
-    console.log("add Bottom");
     newPageHandler.openAddModuleModalAsync(moduleId, "bottom");
   };
 
   const handleVisibleClick = (moduleId, status) => _ => {
-    console.log("visible");
     newPageHandler.toggleModuleVisibility(moduleId, status);
   };
 
   const handleTrashClick = moduleId => _ => {
-    console.log("Trash");
     newPageHandler.moveToTrash(moduleId);
   };
 
   const handleEditClick = moduleId => _ => {
-    console.log("Setting");
     newPageHandler.editModule(moduleId);
   };
 
@@ -81,7 +76,7 @@ const NewPageModule = props => {
   const handleMoveToClick = (moduleId, to) => _ => {
     // up negative id, bottom positive
     moduleId = to == "up" ? -1 * moduleId : moduleId;
-    newPageHandler.moveToModule(moduleId);
+    newPageHandler.moveToModule(moduleId, enqueueSnackbar);
   };
 
   return (
@@ -112,7 +107,7 @@ const NewPageModule = props => {
                 >
                   <ControlCameraIcon />
                 </IconButton>
-                {newPageSt.isAnyModuleMoving ? (
+                {newPageSt.isAnyModuleMoving && !module.isMoving && (
                   <React.Fragment>
                     <IconButton
                       color="secondary"
@@ -127,9 +122,9 @@ const NewPageModule = props => {
                       <ArrowUpwardIcon />
                     </IconButton>
                   </React.Fragment>
-                ) : null}
+                )}
 
-                {!newPageSt.isAnyModuleMoving ? (
+                {!newPageSt.isAnyModuleMoving && (
                   <React.Fragment>
                     <IconButton onClick={handleAddBottomClick(module.id)}>
                       <LibraryAddIcon />
@@ -152,18 +147,20 @@ const NewPageModule = props => {
                     <IconButton onClick={handleTrashClick(module.id)}>
                       <DeleteForeverIcon />
                     </IconButton>
-                    <IconButton onClick={handleEditClick}>
+                    <IconButton onClick={handleEditClick(module.id)}>
                       <EditIcon />
                     </IconButton>
                   </React.Fragment>
-                ) : null}
+                )}
                 <Paper
                   className={`${classes.module} ${classes.overlayer} ${
                     module.visible ? "" : classes.invisible
                   } ${module.isMoving ? classes.moving : ""}`}
                 >
                   {React.createElement(componentMap[module.type], {
-                    contentData: module.contents
+                    contentData: module.contents,
+                    handleApplyChanges: newPageHandler.handleApplyChanges,
+                    handleCancelEditing: newPageHandler.handleCancelEditing
                   })}
                 </Paper>
               </div>
@@ -203,6 +200,7 @@ const NewPageModule = props => {
         saveAddModulesModal={newPageHandler.saveAddModulesModal}
         selectedCount={newPageSt.selectedCount}
         addModuleFromList={newPageHandler.addModuleFromList}
+        enqueueSnackbar={enqueueSnackbar}
       />
     </div>
   );
