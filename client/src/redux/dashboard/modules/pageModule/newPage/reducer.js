@@ -170,7 +170,7 @@ export const addModuleFromList = (state, action) => {
     state.modulesToAdd.length !== 0
       ? state.modulesToAdd.map(el => el.id).reduce(maxCallback, 0)
       : 0;
-  const cloneModule = { ...selectedModule[0] };
+  const cloneModule = cloneDeep(selectedModule[0]);
   cloneModule.id = maxId + 1;
 
   // push cloned obj {...
@@ -235,9 +235,7 @@ export const moveToModule = (state, action) => {
 
 export const editModule = (state, action) => {
   state.page.modules = state.page.modules.map(module => {
-    if (module.id == action.payload.moduleId) {
-      module.contents.isEditing = true;
-    }
+    module.contents.isEditing = module.id == action.payload.moduleId;
     return module;
   });
 
@@ -306,23 +304,33 @@ const mapInputsTitleText = (module, inputs) => {
   module.contents.title.text = inputs.titleText;
   module.contents.title.color = inputs.titleColor;
   module.contents.title.isVisible = inputs.titleSwitch;
+  module.contents.title.align = inputs.titleAlign;
 
   module.contents.subTitle.text = inputs.subTitleText;
   module.contents.subTitle.color = inputs.subTitleColor;
   module.contents.subTitle.isVisible = inputs.subTitleSwitch;
+  module.contents.subTitle.align = inputs.subTitleAlign;
 
   module.contents.line.width = inputs.lineWidth;
   module.contents.line.color = inputs.lineColor;
   module.contents.line.isVisible = inputs.lineSwitch;
+  module.contents.line.align = inputs.lineAlign;
 
   module.contents.body.text = inputs.bodyText;
   module.contents.body.color = inputs.bodyColor;
   module.contents.body.isVisible = inputs.bodySwitch;
+  module.contents.body.align = inputs.bodyAlign;
 
   module.contents.readMore.text = inputs.readMoreText;
   module.contents.readMore.url = inputs.readMoreUrl;
   module.contents.readMore.color = inputs.readMoreColor;
   module.contents.readMore.isVisible = inputs.readMoreSwitch;
+  module.contents.readMore.align = inputs.readMoreAlign;
 
   return module;
+};
+
+const cloneDeep = obj => {
+  // return { ...selectedModule[0] }; // shallow
+  return JSON.parse(JSON.stringify(obj));
 };

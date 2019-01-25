@@ -21,6 +21,7 @@ const styles = theme => ({
     marginBottom: "10px",
     display: "flex",
     flexDirection: "column",
+    alignItems: "flex-start",
     "& h6": {
       marginBottom: "20px"
     }
@@ -43,14 +44,14 @@ const styles = theme => ({
     padding: "0",
     marginLeft: "auto",
     display: "flex"
-  }  
-  ,button: {
+  },
+  button: {
     margin: theme.spacing.unit
   },
   rightIcon: {
     marginLeft: theme.spacing.unit
   },
-  footer:{
+  footer: {
     display: "flex",
     justifyContent: "flex-end",
     padding: "10px"
@@ -65,10 +66,14 @@ const styles = theme => ({
   },
   title: {
     display: "flex",
-    marginBottom: "20px"
+    marginBottom: "20px",
+    alignSelf: "stretch"
   },
   pullRight: {
-    marginLeft: "auto",
+    marginLeft: "auto"
+  },
+  margin: {
+    margin: "10px 10px 0px 40px"
   }
 });
 
