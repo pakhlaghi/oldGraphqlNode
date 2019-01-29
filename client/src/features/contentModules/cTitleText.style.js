@@ -56,10 +56,6 @@ const styles = theme => ({
     justifyContent: "flex-end",
     padding: "10px"
   },
-  color: {
-    width: "80px",
-    margin: "10px 10px 10px 50px"
-  },
   input: {
     margin: "10px 10px 20px 40px",
     width: "70%"
