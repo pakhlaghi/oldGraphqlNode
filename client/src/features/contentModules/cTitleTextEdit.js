@@ -38,12 +38,12 @@ class CTitleText extends React.Component {
         containerColor: contentData.color,
         containerBackground: contentData.background,
 
-        imageWidth: contentData.image.width,
-        imagePosition: contentData.image.position,
-        imageSwitch: contentData.image.isVisible,
-        imageAlign: contentData.image.align,
-        imageTitle: contentData.image.title,
-        imageUrl: contentData.image.url,
+        imageWidth: contentData.image && contentData.image.width,
+        imagePosition: contentData.image && contentData.image.position,
+        imageSwitch: contentData.image && contentData.image.isVisible,
+        imageAlign: contentData.image && contentData.image.align,
+        imageTitle: contentData.image && contentData.image.title,
+        imageUrl: contentData.image && contentData.image.url,
 
         titleText: contentData.title.text,
         titleColor: contentData.title.color,
@@ -79,7 +79,8 @@ class CTitleText extends React.Component {
       classes,
       handleApplyChanges,
       handleCancelEditing,
-      moduleType
+      moduleType,
+      contentData
     } = this.props;
     const { inputs } = this.state;
     const staticContent = {
@@ -87,7 +88,7 @@ class CTitleText extends React.Component {
         title: "Edit"
       },
       container: {
-        title: "Container",
+        title: "Global",
         label: {
           color: {
             text: "Module Text Color",
@@ -193,8 +194,15 @@ class CTitleText extends React.Component {
     };
 
     return (
-      <div className={classNames(classes.container, classes.noTopPadding)}>
+      <div
+        className={classNames(
+          classes.container,
+          classes.noTopPadding,
+          classes.topMargin
+        )}
+      >
         <Paper className={classes.topLayer}>
+          {/* --Header-- */}
           <div className={classes.editHeader}>
             <Typography color="inherit" variant="h6">
               {staticContent.header.title}
@@ -210,117 +218,7 @@ class CTitleText extends React.Component {
           <Divider />
 
           <div>
-            <div className={classes.paper}>
-              <div className={classes.title}>
-                <Typography variant="h6">
-                  {staticContent.image.title}
-                </Typography>
-                <FormControlLabel
-                  control={
-                    <Switch
-                      id="imageSwitch"
-                      defaultChecked={inputs.imageSwitch}
-                      onChange={handleInputChange}
-                      color="primary"
-                    />
-                  }
-                  label={staticContent.image.label.switch}
-                  className={classes.pullRight}
-                />
-              </div>
-
-              <FormControl component="fieldset" className={classes.margin}>
-                <FormLabel component="legend" className={classes.legend}>
-                  Alignment
-                </FormLabel>
-                <RadioGroup
-                  aria-label="Alignment"
-                  value={inputs.imageAlign}
-                  onChange={handleInputChange}
-                  row={true}
-                  name="imageAlign"
-                >
-                  <FormControlLabel
-                    value="start"
-                    control={<Radio />}
-                    label="Start"
-                  />
-                  <FormControlLabel
-                    value="center"
-                    control={<Radio />}
-                    label="Center"
-                  />
-                  <FormControlLabel
-                    value="end"
-                    control={<Radio />}
-                    label="End"
-                  />
-                </RadioGroup>
-              </FormControl>
-
-              <FormControl component="fieldset" className={classes.margin}>
-                <FormLabel component="legend" className={classes.legend}>
-                  Position
-                </FormLabel>
-                <RadioGroup
-                  aria-label="Position"
-                  value={inputs.imagePosition}
-                  onChange={handleInputChange}
-                  row={true}
-                  name="imagePosition"
-                >
-                  <FormControlLabel
-                    value="top"
-                    control={<Radio />}
-                    label="Top"
-                  />
-                  <FormControlLabel
-                    value="right"
-                    control={<Radio />}
-                    label="Right"
-                  />
-                  <FormControlLabel
-                    value="bottom"
-                    control={<Radio />}
-                    label="Bottom"
-                  />
-                  <FormControlLabel
-                    value="left"
-                    control={<Radio />}
-                    label="Left"
-                  />
-                </RadioGroup>
-              </FormControl>
-
-              <TextField
-                id="imageUrl"
-                label={staticContent.image.label.url}
-                className={classes.input}
-                variant="filled"
-                defaultValue={inputs.imageUrl}
-                onChange={handleInputChange}
-              />
-
-              <TextField
-                id="imageTitle"
-                label={staticContent.image.label.title}
-                className={classes.input}
-                variant="filled"
-                defaultValue={inputs.imageTitle}
-                onChange={handleInputChange}
-              />
-
-              <TextField
-                id="imageWidth"
-                label={staticContent.image.label.width}
-                className={classes.input}
-                variant="filled"
-                defaultValue={inputs.imageWidth}
-                onChange={handleInputChange}
-              />
-            </div>
-            <Divider />
-
+            {/* --Container-- */}
             <div className={classes.paper}>
               <div className={classes.title}>
                 <Typography variant="h6">
@@ -342,10 +240,128 @@ class CTitleText extends React.Component {
                 handleInputChange={handleInputChange}
                 handleNoColor={handleNoColor}
                 label={staticContent.container.label.color.background}
+                defaultColor="white"
               />
             </div>
             <Divider />
 
+            {/* --Image-- */}
+            {contentData.image && (
+              <React.Fragment>
+                <div className={classes.paper}>
+                  <div className={classes.title}>
+                    <Typography variant="h6">
+                      {staticContent.image.title}
+                    </Typography>
+                    <FormControlLabel
+                      control={
+                        <Switch
+                          id="imageSwitch"
+                          defaultChecked={inputs.imageSwitch}
+                          onChange={handleInputChange}
+                          color="primary"
+                        />
+                      }
+                      label={staticContent.image.label.switch}
+                      className={classes.pullRight}
+                    />
+                  </div>
+
+                  <FormControl component="fieldset" className={classes.margin}>
+                    <FormLabel component="legend" className={classes.legend}>
+                      Alignment
+                    </FormLabel>
+                    <RadioGroup
+                      aria-label="Alignment"
+                      value={inputs.imageAlign}
+                      onChange={handleInputChange}
+                      row={true}
+                      name="imageAlign"
+                    >
+                      <FormControlLabel
+                        value="start"
+                        control={<Radio />}
+                        label="Start"
+                      />
+                      <FormControlLabel
+                        value="center"
+                        control={<Radio />}
+                        label="Center"
+                      />
+                      <FormControlLabel
+                        value="end"
+                        control={<Radio />}
+                        label="End"
+                      />
+                    </RadioGroup>
+                  </FormControl>
+
+                  <FormControl component="fieldset" className={classes.margin}>
+                    <FormLabel component="legend" className={classes.legend}>
+                      Position
+                    </FormLabel>
+                    <RadioGroup
+                      aria-label="Position"
+                      value={inputs.imagePosition}
+                      onChange={handleInputChange}
+                      row={true}
+                      name="imagePosition"
+                    >
+                      <FormControlLabel
+                        value="top"
+                        control={<Radio />}
+                        label="Top"
+                      />
+                      <FormControlLabel
+                        value="right"
+                        control={<Radio />}
+                        label="Right"
+                      />
+                      <FormControlLabel
+                        value="bottom"
+                        control={<Radio />}
+                        label="Bottom"
+                      />
+                      <FormControlLabel
+                        value="left"
+                        control={<Radio />}
+                        label="Left"
+                      />
+                    </RadioGroup>
+                  </FormControl>
+
+                  <TextField
+                    id="imageUrl"
+                    label={staticContent.image.label.url}
+                    className={classes.input}
+                    variant="filled"
+                    defaultValue={inputs.imageUrl}
+                    onChange={handleInputChange}
+                  />
+
+                  <TextField
+                    id="imageTitle"
+                    label={staticContent.image.label.title}
+                    className={classes.input}
+                    variant="filled"
+                    defaultValue={inputs.imageTitle}
+                    onChange={handleInputChange}
+                  />
+
+                  <TextField
+                    id="imageWidth"
+                    label={staticContent.image.label.width}
+                    className={classes.input}
+                    variant="filled"
+                    defaultValue={inputs.imageWidth}
+                    onChange={handleInputChange}
+                  />
+                </div>
+                <Divider />
+              </React.Fragment>
+            )}
+
+            {/* --Title-- */}
             <div className={classes.paper}>
               <div className={classes.title}>
                 <Typography variant="h6">
@@ -413,6 +429,7 @@ class CTitleText extends React.Component {
             </div>
             <Divider />
 
+            {/* --Sub Title-- */}
             <div className={classes.paper}>
               <div className={classes.title}>
                 <Typography variant="h6">
@@ -480,6 +497,7 @@ class CTitleText extends React.Component {
             </div>
             <Divider />
 
+            {/* --Line-- */}
             <div className={classes.paper}>
               <div className={classes.title}>
                 <Typography variant="h6">{staticContent.line.title}</Typography>
@@ -545,6 +563,7 @@ class CTitleText extends React.Component {
             </div>
             <Divider />
 
+            {/* --Body-- */}
             <div className={classes.paper}>
               <div className={classes.title}>
                 <Typography variant="h6">{staticContent.body.title}</Typography>
@@ -611,6 +630,7 @@ class CTitleText extends React.Component {
             </div>
             <Divider />
 
+            {/* --Read More-- */}
             <div className={classes.paper}>
               <div className={classes.title}>
                 <Typography variant="h6">
@@ -688,26 +708,29 @@ class CTitleText extends React.Component {
           </div>
           <Divider />
 
+          {/* --Footer-- */}
           <div className={classes.footer}>
-            <Button
-              variant="contained"
-              color="default"
-              className={classes.button}
-              onClick={handleCancel}
-            >
-              {staticContent.footer.button.cancel}
-              <CancelIcon className={classes.rightIcon} />
-            </Button>
+            <div className={classes.pullRight}>
+              <Button
+                variant="contained"
+                color="default"
+                className={classes.button}
+                onClick={handleCancel}
+              >
+                {staticContent.footer.button.cancel}
+                <CancelIcon className={classes.rightIcon} />
+              </Button>
 
-            <Button
-              variant="contained"
-              color="secondary"
-              className={classes.button}
-              onClick={handleApply}
-            >
-              {staticContent.footer.button.apply}
-              <SaveIcon className={classes.rightIcon} />
-            </Button>
+              <Button
+                variant="contained"
+                color="secondary"
+                className={classes.button}
+                onClick={handleApply}
+              >
+                {staticContent.footer.button.apply}
+                <SaveIcon className={classes.rightIcon} />
+              </Button>
+            </div>
           </div>
         </Paper>
       </div>
