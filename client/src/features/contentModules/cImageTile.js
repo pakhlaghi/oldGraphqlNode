@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import CImageTileEdit from "./cImageTileEdit";
 // UI
 import styles from "./cImageTile.style";
@@ -10,6 +11,7 @@ import GridListTile from "@material-ui/core/GridListTile";
 import GridListTileBar from "@material-ui/core/GridListTileBar";
 import IconButton from "@material-ui/core/IconButton";
 import InfoIcon from "@material-ui/icons/Info";
+import { Button } from "@material-ui/core";
 
 function CImageTile(props) {
   const {
@@ -36,8 +38,31 @@ function CImageTile(props) {
               <GridListTile cols={tile.cols || 1} key={index}>
                 <img src={tile.imageUrl} alt={tile.title} />
                 <GridListTileBar
-                  title={tile.title}
-                  subtitle={<span>by: {tile.subTitle}</span>}
+                  title={
+                    <Link
+                      to={tile.linkUrl ? tile.linkUrl : "#"}
+                      style={{
+                        textDecoration: "none"
+                      }}
+                    >
+                      <Button
+                        style={{
+                          color: tile.textColor || contentData.containerColor
+                        }}
+                      >
+                        {tile.title}
+                      </Button>
+                    </Link>
+                  }
+                  subtitle={
+                    <span
+                      style={{
+                        color: tile.textColor || contentData.containerColor
+                      }}
+                    >
+                      by: {tile.subTitle}
+                    </span>
+                  }
                   actionIcon={
                     <IconButton className={classes.icon}>
                       <InfoIcon />

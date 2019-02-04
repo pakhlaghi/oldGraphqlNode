@@ -15,13 +15,18 @@ import {
   Paper,
   IconButton,
   Button,
-  TextField
+  TextField,
+  RadioGroup,
+  FormControl,
+  FormLabel,
+  FormControlLabel,
+  Radio
 } from "@material-ui/core";
 
 // Utility
 import CCColorPicker from "../../utility/ccColorPicker";
 
-class CTitleText extends React.Component {
+class CIconTitleTextEdit extends React.Component {
   // add state because of radio button
   constructor(props) {
     super(props);
@@ -30,6 +35,7 @@ class CTitleText extends React.Component {
     this.state = {
       inputs: {
         containerColor: contentData.containerColor,
+        backgroundColor: contentData.backgroundColor,
         columnNumber: contentData.columnNumber,
         tiles: this.mapContentToState(contentData)
       }
@@ -40,12 +46,12 @@ class CTitleText extends React.Component {
     return contentData.tiles.map((tile, index) => {
       return {
         id: index + 1,
-        imageTitle: tile.title,
-        imageSubTitle: tile.subTitle,
-        imageDetails: tile.details,
-        imageUrl: tile.imageUrl,
-        imageLinkUrl: tile.linkUrl,
-        imageTextColor: tile.textColor
+        title: tile.title,
+        text: tile.text,
+        url: tile.url,
+        icon: tile.icon,
+        color: tile.color,
+        align: tile.align
       };
     });
   };
@@ -67,19 +73,19 @@ class CTitleText extends React.Component {
         label: {
           columnNumber: "Nomber of Columns",
           color: {
-            text: "Module Text Color"
+            text: "Module Text Color",
+            background: "Module Background Color"
           }
         }
       },
-      image: {
+      tile: {
         title: "Tile",
         label: {
           delete: "Delete",
           title: "Title",
-          imageLinkUrl: "Link to URL",
-          subTitle: "Sub-Title",
-          imageUrl: "Image URL",
-          details: "Details",
+          url: "Link to URL",
+          text: "Text",
+          icon: "Icon",
           color: "Text Color"
         }
       },
@@ -114,9 +120,23 @@ class CTitleText extends React.Component {
           break;
 
         case "radio":
-          this.setState({
-            inputs: { ...inputs, [e.target.name]: e.target.value }
-          });
+          if (e.target.name.indexOf("-") >= 0) {
+            const inputIndex = e.target.name.split("-")[1] - 1;
+            const inputId = e.target.name.split("-")[0];
+
+            const tiles = this.state.inputs.tiles.map((tile, index) => {
+              if (index == inputIndex) {
+                tile[inputId] = e.target.value;
+              }
+              return tile;
+            });
+
+            this.setState({ ...inputs, tiles: tiles });
+          } else {
+            this.setState({
+              inputs: { ...inputs, [e.target.name]: e.target.value }
+            });
+          }
           break;
 
         default:
@@ -146,7 +166,7 @@ class CTitleText extends React.Component {
     };
 
     const handleApply = _ => {
-      handleApplyChanges(this.state.inputs, "cImageTile");
+      handleApplyChanges(this.state.inputs, "cIconTitleText");
     };
 
     const handleCancel = _ => {
@@ -185,12 +205,12 @@ class CTitleText extends React.Component {
         .id;
       const emptyObj = {
         id: lastId + 1,
-        imageTitle: "",
-        imageSubTitle: "",
-        imageDetails: "",
-        imageUrl: "",
-        imageLinkUrl: "",
-        imageTextColor: ""
+        title: "",
+        text: "",
+        url: "",
+        icon: "",
+        color: "",
+        align: ""
       };
 
       this.state.inputs.tiles.push(emptyObj);
@@ -248,6 +268,14 @@ class CTitleText extends React.Component {
                 handleNoColor={handleNoColor}
                 label={staticContent.container.label.color.text}
               />
+
+              <CCColorPicker
+                id="backgroundColor"
+                value={inputs.backgroundColor}
+                handleInputChange={handleInputChange}
+                handleNoColor={handleNoColor}
+                label={staticContent.container.label.color.background}
+              />
             </div>
             <Divider />
 
@@ -256,7 +284,7 @@ class CTitleText extends React.Component {
               <div className={classes.paper} key={tile.id}>
                 <div className={classes.title}>
                   <Typography variant="h6">
-                    {`${index + 1}- ${staticContent.image.title}`}
+                    {`${index + 1}- ${staticContent.tile.title}`}
                   </Typography>
                   <IconButton
                     onClick={handleRemoveClick(index)}
@@ -268,56 +296,76 @@ class CTitleText extends React.Component {
                 </div>
 
                 <TextField
-                  id={`imageUrl-${index + 1}`}
-                  label={staticContent.image.label.imageUrl}
+                  id={`icon-${index + 1}`}
+                  label={staticContent.tile.label.icon}
                   className={classes.input}
                   variant="filled"
-                  defaultValue={tile.imageUrl}
+                  defaultValue={tile.icon}
                   onChange={handleInputChange}
                 />
 
                 <TextField
-                  id={`imageLinkUrl-${index + 1}`}
-                  label={staticContent.image.label.imageLinkUrl}
+                  id={`url-${index + 1}`}
+                  label={staticContent.tile.label.url}
                   className={classes.input}
                   variant="filled"
-                  defaultValue={tile.imageLinkUrl}
+                  defaultValue={tile.url}
                   onChange={handleInputChange}
                 />
 
                 <TextField
-                  id={`imageTitle-${index + 1}`}
-                  label={staticContent.image.label.title}
+                  id={`title-${index + 1}`}
+                  label={staticContent.tile.label.title}
                   className={classes.input}
                   variant="filled"
-                  defaultValue={tile.imageTitle}
+                  defaultValue={tile.title}
                   onChange={handleInputChange}
                 />
 
                 <TextField
-                  id={`imageSubTitle-${index + 1}`}
-                  label={staticContent.image.label.subTitle}
+                  id={`text-${index + 1}`}
+                  label={staticContent.tile.label.text}
                   className={classes.input}
                   variant="filled"
-                  defaultValue={tile.imageSubTitle}
+                  defaultValue={tile.text}
                   onChange={handleInputChange}
                 />
 
-                <TextField
-                  id={`imageDetails-${index + 1}`}
-                  label={staticContent.image.label.details}
-                  className={classes.input}
-                  variant="filled"
-                  defaultValue={tile.imageDetails}
-                  onChange={handleInputChange}
-                />
+                <FormControl component="fieldset" className={classes.margin}>
+                  <FormLabel component="legend" className={classes.legend}>
+                    Alignment
+                  </FormLabel>
+                  <RadioGroup
+                    aria-label="Alignment"
+                    value={tile.align}
+                    onChange={handleInputChange}
+                    name={`align-${index + 1}`}
+                    row={true}
+                  >
+                    <FormControlLabel
+                      value="left"
+                      control={<Radio />}
+                      label="Left"
+                    />
+                    <FormControlLabel
+                      value="center"
+                      control={<Radio />}
+                      label="Center"
+                    />
+                    <FormControlLabel
+                      value="right"
+                      control={<Radio />}
+                      label="Right"
+                    />
+                  </RadioGroup>
+                </FormControl>
 
                 <CCColorPicker
-                  id={`imageTextColor-${index + 1}`}
-                  value={tile.imageTextColor}
+                  id={`color-${index + 1}`}
+                  value={tile.color}
                   handleInputChange={handleInputChange}
                   handleNoColor={handleNoColor}
-                  label={staticContent.image.label.color}
+                  label={staticContent.tile.label.color}
                 />
               </div>
             ))}
@@ -365,4 +413,4 @@ class CTitleText extends React.Component {
   }
 }
 
-export default withStyles(styles)(CTitleText);
+export default withStyles(styles)(CIconTitleTextEdit);
