@@ -298,6 +298,10 @@ const mapInputToState = (moduleType, module, inputs) => {
       return mapInputsImageTile(module, inputs, moduleType);
     case "cIconTitleText":
       return mapInputsIconTitleText(module, inputs, moduleType);
+    case "cFooter":
+      return mapInputsFooter(module, inputs, moduleType);
+    case "cHeader":
+      return mapInputsHeader(module, inputs, moduleType);
     default:
       return;
   }
@@ -378,6 +382,45 @@ const mapInputsIconTitleText = (module, inputs) => {
   module.contents.columnNumber = inputs.columnNumber;
   module.contents.containerColor = inputs.containerColor;
   module.contents.backgroundColor = inputs.backgroundColor;
+
+  return module;
+};
+
+const mapInputsFooter = (module, inputs) => {
+  module.contents.socialData = inputs.socialData.map(item => {
+    return {
+      title: item.title,
+      url: item.url,
+      icon: item.icon
+    };
+  });
+
+  module.contents.style = {
+    color: inputs.styleColor,
+    backgroundColor: inputs.styleBackgroundColor
+  };
+  module.contents.text = inputs.text;
+  module.contents.term.text = inputs.termText;
+  module.contents.term.url = inputs.termUrl;
+
+  return module;
+};
+
+const mapInputsHeader = (module, inputs) => {
+  module.contents.isFullHeader = inputs.isFullHeader;
+  module.contents.color = inputs.color;
+  module.contents.background.image = inputs.backgroundImage;
+  module.contents.background.height = inputs.backgroundHeight;
+
+  module.contents.title = inputs.contentTitle;
+  module.contents.subTitle = inputs.contentSubTitle;
+  module.contents.topBar.title = inputs.topBarTitle;
+  module.contents.topBar.menuId = inputs.topBarMenuId;
+
+  module.contents.buttons.primary.text = inputs.buttonPrimaryText;
+  module.contents.buttons.primary.url = inputs.buttonPrimaryUrl;
+  module.contents.buttons.secondary.text = inputs.buttonSecText;
+  module.contents.buttons.secondary.url = inputs.buttonSecUrl;
 
   return module;
 };

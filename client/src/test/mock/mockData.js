@@ -48,8 +48,16 @@ const home = id => {
         id: 6,
         type: "CHeader",
         contents: {
+          isFullHeader: true,
+          color: "#ffffff",
+          background: {
+            image:
+              "https://ld-wp.template-help.com/wordpress_63433/wp-content/uploads/2016/11/bg-1.jpg",
+            height: "65px"
+          },
           topBar: {
             title: "Code Core",
+            menuId: 1,
             menuItems: [
               { id: 1, to: "/page/home", title: "Home" },
               { id: 2, to: "/page/aboutus", title: "About Us" },
@@ -64,11 +72,11 @@ const home = id => {
             the go is now so much easier!`,
           buttons: {
             primary: {
-              title: "Primary",
+              text: "Primary",
               url: "#Primary"
             },
             secondary: {
-              title: "Secondary",
+              text: "Secondary",
               url: "#Secondary"
             }
           }
@@ -244,6 +252,10 @@ const home = id => {
         type: "CFooter",
         contents: {
           text: "Code Core Co. © 2018. Privacy Policy | Terms Of Use",
+          term: {
+            text: "Terms Of Use",
+            url: "#Term"
+          },
           style: {
             color: "#fff",
             backgroundColor: "#263238"
@@ -274,8 +286,16 @@ const home = id => {
         id: 6,
         type: "CHeader",
         contents: {
+          isFullHeader: true,
+          color: "#ffffff",
+          background: {
+            image:
+              "https://ld-wp.template-help.com/wordpress_63433/wp-content/uploads/2016/11/bg-1.jpg",
+            height: "65px"
+          },
           topBar: {
-            title: "Code Core About Us",
+            title: "Code Core",
+            menuId: 1,
             menuItems: [
               { id: 1, to: "/page/home", title: "Home" },
               { id: 2, to: "/page/aboutus", title: "About Us" },
@@ -434,8 +454,16 @@ const dashboard = {
       name: "Header",
       type: "CHeader",
       contents: {
+        isFullHeader: true,
+        color: "#ffffff",
+        background: {
+          image:
+            "https://ld-wp.template-help.com/wordpress_63433/wp-content/uploads/2016/11/bg-1.jpg",
+          height: "65px"
+        },
         topBar: {
           title: "Code Core",
+          menuId: 1,
           menuItems: [
             { id: 1, to: "/page/home", title: "Home" },
             { id: 2, to: "/page/aboutus", title: "About Us" },
@@ -450,11 +478,11 @@ const dashboard = {
           the go is now so much easier!`,
         buttons: {
           primary: {
-            title: "Primary",
+            text: "Primary",
             url: "#Primary"
           },
           secondary: {
-            title: "Secondary",
+            text: "Secondary",
             url: "#Secondary"
           }
         }
@@ -663,6 +691,10 @@ const dashboard = {
       type: "CFooter",
       contents: {
         text: "Code Core Co. © 2018. Privacy Policy | Terms Of Use",
+        term: {
+          text: "Terms Of Use",
+          url: "#Term"
+        },
         style: {
           color: "#fff",
           backgroundColor: "#263238"
