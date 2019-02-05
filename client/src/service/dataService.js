@@ -39,7 +39,6 @@ const getHomeContent = id => {
     // development code
     return mockPromise(mockData.home(id));
   } else {
-    dispatch(showSpinner(true));
 
     axios
       .post(config.api.gqUrl, {
