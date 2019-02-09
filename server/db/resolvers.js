@@ -2,6 +2,11 @@ const query = require('./query');
 
 const resolvers = {
     Query: {
+        // _ and __ are just parameter like a and b 
+        // (previousValue, parameters) => data
+        // (previousValue, parameters, context) => data
+        // stored the database connections in the GraphQL server context, 
+        // which is passed as third argument to all resolver functions
         Tweets: (_, __, context) => query.getAllFromTable(context, 'tweet'),
         Tweet: (_, { id }, context) => query.getDataById(context, 'tweet', id)
     },

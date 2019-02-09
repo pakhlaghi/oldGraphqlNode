@@ -1,5 +1,5 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from "react";
+import PropTypes from "prop-types";
 
 const Nav = ({ navData }) => {
   const { brand, menu } = navData;
@@ -48,16 +48,18 @@ Nav.propTypes = {
   navData: PropTypes.shape({
     brand: PropTypes.shape({
       text: PropTypes.string,
-      imgUrl: PropTypes.string,
+      imgUrl: PropTypes.string
     }),
-    menu: PropTypes.arrayOf(PropTypes.shape({
-      id: PropTypes.number,
-      text: PropTypes.string,
-      link: PropTypes.string,
-      pId: PropTypes.number,
-      order: PropTypes.number,
-    })),
-  }).isRequired,
+    menu: PropTypes.arrayOf(
+      PropTypes.shape({
+        id: PropTypes.number,
+        text: PropTypes.string,
+        link: PropTypes.string,
+        pId: PropTypes.number,
+        order: PropTypes.number
+      })
+    )
+  }).isRequired
 };
 
 export default Nav;

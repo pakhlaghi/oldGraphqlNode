@@ -16,11 +16,19 @@ const getAllFromTable = (context, table) => {
 const getDataById = (context, table, id) => {
     return new Promise((resolve, reject) => {
 
+        try {
+            await context.mysqlClient.connect();
+        } catch (e) {
+            console.log('Database Connection failed:' + e);
+        }
+
         context.mysqlClient
             .query(`SELECT * from ${table} where id = ${id}`, (err, rows) => {
                 if (!err) {
+                    context.mysqlClient.end();
                     resolve(rows[0]);
                 } else {
+                    context.mysqlClient.end();
                     reject(err);
                 }
             });

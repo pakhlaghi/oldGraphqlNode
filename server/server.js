@@ -26,6 +26,7 @@ const start = async() => {
     // Serve static files from the React app
     app.use(express.static(path.join(__dirname, "public")));
 
+    // context will be passed into query and then resolver
     app.use('/graphql', graphqlHTTP({
         schema: schema,
         graphiql: true,
@@ -33,7 +34,7 @@ const start = async() => {
     }));
 
     app.get("/test", function(req, res) {
-        mysqlClient.query('SELECT * from user LIMIT 2', function(err, rows, fields) {
+        mysqlClient.query('SELECT * from tweet', function(err, rows, fields) {
             mysqlClient.end();
             if (!err)
                 console.log('The solution is: ', rows);

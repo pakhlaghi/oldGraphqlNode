@@ -8,11 +8,11 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch) => {
-  const fetchNavJson = () => {
+  const fetchNavJsonProp = () => {
     dispatch(appOperations.fetchNavJson());
   };
 
-  return { fetchNavJson };
+  return { fetchNavJsonProp };
 };
 
 const Home = connect(mapStateToProps, mapDispatchToProps)(HomeComponent);
